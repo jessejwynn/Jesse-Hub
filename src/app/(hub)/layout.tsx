@@ -15,9 +15,14 @@ export default async function HubLayout({ children }: { children: React.ReactNod
           </Link>
           <nav className="flex items-center gap-2 text-sm">
             {profile.is_super_admin && (
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/admin/users">Users</Link>
-              </Button>
+              <>
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/admin/projects">Projects</Link>
+                </Button>
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/admin/users">Users</Link>
+                </Button>
+              </>
             )}
             <span className="hidden text-muted-foreground sm:inline">
               {profile.name ?? profile.email}

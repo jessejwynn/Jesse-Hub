@@ -12,3 +12,7 @@ export const APPS: AppInfo[] = [
     description: "SOP checklists and documents for each order.",
   },
 ];
+
+export function isAppSlug(value: unknown): value is string {
+  return APPS.some((a) => a.slug === value);
+}
