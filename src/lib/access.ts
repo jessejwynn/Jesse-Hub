@@ -10,6 +10,7 @@ export type AppProject = {
   name: string;
   code: string;
   role: Role | null; // null = super admin who isn't a member
+  canManage: boolean; // manager in this project, or super admin
 };
 
 // Apps the current user can open from the launcher.
@@ -41,7 +42,11 @@ export async function getAppProjects(app: string): Promise<AppProject[]> {
       .from("projects")
       .select("id, name, code")
       .order("name");
-    return (projects ?? []).map((p) => ({ ...p, role: roleByProject.get(p.id) ?? null }));
+    return (projects ?? []).map((p) => ({
+      ...p,
+      role: roleByProject.get(p.id) ?? null,
+      canManage: true,
+    }));
   }
 
   const { data: rows } = await supabase
@@ -53,7 +58,10 @@ export async function getAppProjects(app: string): Promise<AppProject[]> {
   return (rows ?? [])
     .map((r) => r.projects as unknown as { id: string; name: string; code: string } | null)
     .filter((p): p is { id: string; name: string; code: string } => p !== null)
-    .map((p) => ({ ...p, role: roleByProject.get(p.id) ?? null }))
+    .map((p) => {
+      const role = roleByProject.get(p.id) ?? null;
+      return { ...p, role, canManage: role === "manager" };
+    })
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 

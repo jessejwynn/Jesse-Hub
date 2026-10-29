@@ -27,7 +27,7 @@ A web app for managing orders by SOP. When an order is entered, its SOP checklis
    - Optional: limit uploads for a slot to certain roles.
 4. **SOP templates:** a template is an ordered list of steps or document slots (name, required?, notes).
 5. **Orders:** create an order (order number, customer, date, notes), pick a template, and the checklist is generated automatically.
-6. **Checklist slots:** status (pending/uploaded/done), file upload, view, download, uploaded-by and timestamp, multiple files or versions per slot.
+6. **Checklist slots:** status (pending/uploaded/done), file upload, view, download, uploaded-by and upload timestamp, multiple files or versions per slot. Each upload also records, entered by the uploader: a title (e.g. "SO for 50 cartons"), the document number (e.g. invoice no., SJ no.) and the document date (the date printed on the invoice, SJ, PO, etc.).
 7. **Search and filter:** find orders by number, customer, status or date.
 
 ## Data model (draft)
@@ -38,7 +38,7 @@ A web app for managing orders by SOP. When an order is entered, its SOP checklis
 - sop_template_items (id, template_id, name, position, required)
 - orders (id, project_id, template_id, order_no, customer, date, status, notes)
 - order_items (id, order_id, name, position, status, completed_by, completed_at)
-- order_files (id, order_item_id, storage_path, file_name, uploaded_by, uploaded_at)
+- order_files (id, order_item_id, storage_path, file_name, uploaded_by, uploaded_at, title, document_no, document_date)
 
 Use Supabase RLS so every query is scoped to the projects the user belongs to. Store files in a private bucket at `project/{project_id}/order/{order_id}/...` and serve them with signed URLs.
 
